@@ -11,3 +11,8 @@ public interface DepartmentDao {
   Department findById(Integer id);
   List<Department> findAll();
 }
+
+/**
+ * as interfaces DAO possuem os métodos que suas implementações
+ * devem possuir
+ */

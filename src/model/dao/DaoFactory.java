@@ -7,3 +7,8 @@ public class DaoFactory {
     return new SellerDaoJDBC();
   }
 }
+
+/**
+ * A Factory tem como objetivo proteger a implementação
+ * das interfaces DAO e deixar exposto somente a interface
+ */

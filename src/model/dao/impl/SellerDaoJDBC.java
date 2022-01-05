@@ -32,3 +32,7 @@ public class SellerDaoJDBC implements SellerDao {
     return null;
   }
 }
+
+/**
+ * implementação das interfaces do DAO
+ */

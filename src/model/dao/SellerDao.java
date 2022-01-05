@@ -11,3 +11,8 @@ public interface SellerDao {
   Seller findById(Integer id);
   List<Seller> findAll();
 }
+
+/**
+ * as interfaces DAO possuem os métodos que suas implementações
+ * devem possuir
+ */
