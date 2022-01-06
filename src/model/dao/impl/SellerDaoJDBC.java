@@ -5,11 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import db.DB;
 import db.DbException;
 import model.dao.SellerDao;
 import model.entities.Department;
@@ -25,7 +27,40 @@ public class SellerDaoJDBC implements SellerDao {
 
   @Override
   public void insert(Seller seller) {
+    String query = 
+    "INSERT INTO seller " +
+    "(Name, Email, BirthDate, BaseSalary, DepartmentId) " +
+    "VALUES (?, ?, ?, ?, ?)";
 
+    PreparedStatement preparedStatement = null;
+
+    try {
+      preparedStatement = this.connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+
+      preparedStatement.setString(1, seller.getName());
+      preparedStatement.setString(2, seller.getEmail());
+      preparedStatement.setDate(3, new Date(seller.getBirthDate().getTime()));
+      preparedStatement.setDouble(4, seller.getBaseSalary());
+      preparedStatement.setInt(5, seller.getDepartment().getId());
+
+      int rowsAffected = preparedStatement.executeUpdate();
+
+      if (rowsAffected > 0) {
+        ResultSet data = preparedStatement.getGeneratedKeys();
+
+        if (data.next()) {
+          int id = data.getInt(1);
+          seller.setId(id);
+          DB.closeResultSet(data);
+        }
+      } else {
+        throw new DbException("Unexpected error! No rows affected");
+      }
+    } catch (SQLException e) {
+      throw new DbException(e.getMessage());
+    } finally {
+      DB.closeStatement(preparedStatement);
+    }
   }
 
   @Override
@@ -157,7 +192,7 @@ public class SellerDaoJDBC implements SellerDao {
     seller.setName(data.getString("Name"));
     seller.setEmail(data.getString("Email"));
     seller.setBaseSalary(data.getDouble("BaseSalary"));
-    seller.setbirthDate(data.getDate("BirthDate"));
+    seller.setBirthDate(data.getDate("BirthDate"));
     seller.setDepartment(dep);
 
     return seller;

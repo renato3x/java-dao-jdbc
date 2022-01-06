@@ -45,11 +45,11 @@ public class Seller implements Serializable {
     this.email = email;
   }
 
-  public Date birthDate() {
+  public Date getBirthDate() {
     return birthDate;
   }
 
-  public void setbirthDate(Date birthDate) {
+  public void setBirthDate(Date birthDate) {
     this.birthDate = birthDate;
   }
 
