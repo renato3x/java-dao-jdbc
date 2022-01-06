@@ -32,5 +32,17 @@ public class Main {
     System.out.println("\n-> Seller - FindAll <-");
     sellers = sellerDao.findAll();
     sellers.forEach(System.out::println);
+
+    System.out.println("\n-> Seller - Update <-");
+    newSeller.setEmail("loremipsum@gmail.com");
+    sellerDao.update(newSeller);
+
+    System.out.println("\n-> Seller - FindAll <-");
+    sellers = sellerDao.findAll();
+    sellers.forEach(System.out::println);
+
+    System.out.println("\n-> Seller - DeleteById <-");
+    sellerDao.deleteById(newSeller.getId());
+    System.out.println("Seller deleted");
   }
 }

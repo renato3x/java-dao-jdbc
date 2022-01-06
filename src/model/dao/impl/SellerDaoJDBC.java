@@ -54,7 +54,7 @@ public class SellerDaoJDBC implements SellerDao {
           DB.closeResultSet(data);
         }
       } else {
-        throw new DbException("Unexpected error! No rows affected");
+        throw new DbException("Unexpected error! Seller not created");
       }
     } catch (SQLException e) {
       throw new DbException(e.getMessage());
@@ -65,12 +65,44 @@ public class SellerDaoJDBC implements SellerDao {
 
   @Override
   public void update(Seller seller) {
+    String sqlQuery =
+    "UPDATE seller " +
+    "SET Name = ?, " + 
+    "Email = ?, " + 
+    "BirthDate = ?, " + 
+    "BaseSalary = ?, " + 
+    "DepartmentId = ? " +
+    "WHERE Id = ? ";
 
+    PreparedStatement query = null;
+
+    try {
+      query = this.connection.prepareStatement(sqlQuery);
+
+      query.setString(1, seller.getName());
+      query.setString(2, seller.getEmail());
+      query.setDate(3, new Date(seller.getBirthDate().getTime()));
+      query.setDouble(4, seller.getBaseSalary());
+      query.setInt(5, seller.getDepartment().getId());
+      query.setInt(6, seller.getId());
+
+      query.executeUpdate();
+    } catch (SQLException e) {
+      throw new DbException(e.getMessage());
+    }
   }
 
   @Override
   public void deleteById(Integer id) {
+    String sqlQuery = "DELETE FROM seller WHERE id = ?";
 
+    try {
+      PreparedStatement query = this.connection.prepareStatement(sqlQuery);
+      query.setInt(1, id);
+      query.executeUpdate();
+    } catch (Exception e) {
+      throw new DbException(e.getMessage());
+    }
   }
 
   @Override
